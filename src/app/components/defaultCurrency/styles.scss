@@ -1,0 +1,15 @@
+.DefaultCurrency {
+  padding-right: 1rem;
+  min-width: 100px;
+  &_select {
+    &:hover {
+      cursor: pointer;
+    }
+
+    &* {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

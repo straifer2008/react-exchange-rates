@@ -1,0 +1,106 @@
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+@keyframes dot {
+  50% {
+    transform: translateX(96px)
+  }
+}
+
+@keyframes dots {
+  50% {
+    transform: translateX(-31px)
+  }
+}
+
+label,
+button {
+
+  .loader {
+    .ball-loader {
+      width: 70px;
+      height: 12px;
+      transform: translateY(0);
+
+      &-ball {
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+}
+
+.loader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  img {
+    max-width: 260px;
+    height: auto;
+    margin-bottom: 40px;
+  }
+
+
+  $width: 100;
+  $ballSize: ($width / 3) - 15px;
+  $color: #000;
+
+  .ball-loader {
+    width: #{$width}px;
+    height: $ballSize;
+    transform: translateY(-50%);
+  }
+
+  .ball-loader-ball {
+    will-change: transform;
+    height:$ballSize;
+    width: $ballSize;
+    border-radius: 50%;
+    background-color: $color;
+    position: absolute;
+    animation: grow 1s ease-in-out infinite alternate;
+
+
+    &.ball1 {
+      left: 0;
+      transform-origin: 100% 50%;
+    }
+
+    &.ball2 {
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+      animation-delay: 0.33s;
+    }
+
+    &.ball3 {
+      right: 0;
+      animation-delay: .66s;
+    }
+  }
+
+  @keyframes grow {
+    to {
+      transform: translateX(-50%) scale(0);
+    }
+  }
+}
+
+.loader__secondary {
+  margin: auto;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border-right: 1px solid;
+  border-top: 1px solid;
+  animation: spin 1s linear infinite;
+}

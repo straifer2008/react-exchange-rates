@@ -1,0 +1,53 @@
+.App {
+  background-color: $bg-base;
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+main.main {
+  margin-top: 20px;
+  padding: 0 1rem 1rem;
+  max-height: calc(100vh - 150px);
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+/*  Margins and paddings */
+@each $space in $spaceAmounts {
+  @each $side in $sides {
+    .m-#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    .p-#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+}
+
+.def {
+  &-input {
+    padding: 13px 18px;
+    border: 1px solid $ocean;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: inherit;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.38;
+    text-align: left;
+    &::placeholder {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.38;
+      text-align: left;
+      color: $grey-text;
+    }
+    &:active, &:focus {
+      border-color: $green;
+      outline: none;
+    }
+  }
+}
