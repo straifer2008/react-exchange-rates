@@ -8,10 +8,15 @@ import {dataOperation} from "../store/data";
 const AppRoutes = () => {
   const dispatch = useDispatch();
   const baseCurrency = useSelector(({ data: { base }}) => base);
+  const rates = useSelector(({data: { rates }}) => rates);
 
   useEffect(() => {
-    dispatch(dataOperation.getRates(baseCurrency));
+    if (!rates || !rates.length) {
+      dispatch(dataOperation.getRates(baseCurrency));
+    }
   })
+
+  if (!rates || !rates.length) return <p>No currencies</p>
 
   return (
     <Suspense fallback={<div>loading...</div>}>

@@ -29,16 +29,16 @@ const RatesPage = () => {
       </div>
       <ul className="RatesPage_list">
         {
-          Object.keys(rates)
-            .filter((rate) => rate.includes(searchStr.toUpperCase()))
-            .map(key => {
-              if (key === base) {
+          rates
+            .filter((rate) => rate.label.includes(searchStr.toUpperCase()))
+            .map((rate) => {
+              if (rate.label === base) {
                 return null
               }
 
               return (
-                <li key={`oneRate-${key}`} className="RatesPage_list__item">
-                  <span>{rates[key]}</span><span>{key}</span>
+                <li key={`oneRate-${rate.label}`} className="RatesPage_list__item">
+                  <span>{rate.value}</span><span>{rate.label}</span>
                 </li>
               );
             })

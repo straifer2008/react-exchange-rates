@@ -1,46 +1,31 @@
-import {useEffect, useState} from 'react';
 import Select from 'react-select'
 import {useDispatch, useSelector} from "react-redux";
-import {changeBaseCurrency} from "../../store/data/action";
+import {dataOperation} from "../../store/data";
 import './styles.scss';
 
-const DefaultCurrency = () => {
-  const {rates, base} = useSelector(({ data }) => ({
-    rates: data.rates,
+const DefaultCurrency = ({ onChange }) => {
+  const {options, base} = useSelector(({ data }) => ({
+    options: data.rates,
     base: data.base
   }));
-  const [options, setOptions] = useState([]);
   const dispatch = useDispatch()
 
-  const currencySearch = (options) => {
-    if (rates) {
-      const newOptions = Object.keys(options).map((key, i) => ({
-        label: key,
-        value: options[key],
-        index: i
-      }));
-
-      setOptions(newOptions);
+  const onChangeHandler = (item) => {
+    if (onChange && typeof onChange === "function" ) {
+      onChange(item);
     }
+
+    dispatch(dataOperation.getRates(item.label));
   }
 
-  const onChangeHandler = ({ label }) => {
-    dispatch(changeBaseCurrency(label))
-  }
-
-  useEffect(() => {
-    currencySearch(rates);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rates])
-
-  if (!options.length) return <p>loading...</p>
+  if (!options || !options.length) return <p>loading...</p>
 
   return (
     <div className="DefaultCurrency">
-      <p>Default currency</p>
+      <small>Default currency</small>
       <Select
         className="DefaultCurrency_select"
-        defaultValue={{label: base, value: rates[base]}}
+        defaultValue={{label: base, value: 1}}
         options={options}
         onChange={onChangeHandler}
       />
