@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from "redux";
 import axiosMiddleware from "redux-axios-middleware";
 import {composeWithDevTools} from "redux-devtools-extension";
-import { logger } from "redux-logger/src";
+// import { logger } from "redux-logger/src";
 import axios from "axios";
 import reducer from "./index";
 import {axiosOptions} from "../utils/helpers/axiosOptions";
@@ -16,7 +16,7 @@ const client = axios.create({
 
 const middleware = applyMiddleware(
   axiosMiddleware(client, axiosOptions),
-  logger,
+  // logger,
 );
 
 const store = function configureStore(initialState) {

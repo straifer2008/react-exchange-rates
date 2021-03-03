@@ -4,6 +4,7 @@ import {ConverterRow} from "../../components";
 import {useDispatch, useSelector} from "react-redux";
 import {fieldNames} from "../../constants/fieldNames";
 import {dataOperation} from "../../store/data";
+import {useStateCallback} from "../../utils/helpers/hooks";
 import './styles.scss';
 
 
@@ -12,7 +13,7 @@ const ConverterPage = () => {
   const {options, base} = useSelector(({data: {rates, base}}) => ({
     options: rates, base
   }));
-  const [defaultValues, setDefaultValues] = useState({
+  const [defaultValues, setDefaultValues] = useStateCallback({
     [fieldNames.yours]: base,
     [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': 'USD'))
   })
@@ -21,20 +22,23 @@ const ConverterPage = () => {
     [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': 'USD')).value,
   })
 
-  const onChangeValueHandler = (value, name, resetValues) => {
+  const onChangeValueHandler = (value, name, resetValues, defValues) => {
+    const defaultData = defValues && defValues[fieldNames.theirs] && defValues[fieldNames.yours] ?
+      defValues : defaultValues;
+
     switch (name) {
       case fieldNames.yours: {
         setCurrencyValues({
           [fieldNames.yours]: value,
           [fieldNames.theirs]: Math
-            .round((defaultValues[fieldNames.theirs].value * value + Number.EPSILON) * 1000) / 1000 || 0
+            .round((defaultData[fieldNames.theirs].value * value + Number.EPSILON) * 1000) / 1000 || 0
         });
         break;
       }
       case fieldNames.theirs: {
         setCurrencyValues({
           [fieldNames.yours]: resetValues || Math
-            .round((value / defaultValues[fieldNames.theirs].value + Number.EPSILON) * 1000) / 1000 || 0,
+            .round((value / defaultData[fieldNames.theirs].value + Number.EPSILON) * 1000) / 1000 || 0,
           [fieldNames.theirs]: value,
         });
         break;
@@ -53,7 +57,7 @@ const ConverterPage = () => {
         setDefaultValues({
           ...defaultValues,
           [fieldNames.theirs]: option
-        })
+        });
         onChangeValueHandler(option.value, fieldNames.theirs, 1);
         break;
       }
@@ -63,7 +67,13 @@ const ConverterPage = () => {
 
   useEffect(() => {
     if (base) {
-      onChangeValueHandler(base.value, fieldNames.yours);
+      setDefaultValues({
+        [fieldNames.yours]: base,
+        [fieldNames.theirs]: options
+          .find(option => option.label === defaultValues[fieldNames.theirs].label)
+      }, (data) => {
+        onChangeValueHandler(base.value, fieldNames.yours, 1, data)
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [base])
