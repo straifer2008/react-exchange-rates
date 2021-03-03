@@ -6,7 +6,6 @@ const initialState = {
   base: {value: 1, label: 'UAH'},
   rates: null,
   date: null,
-  converterData: null
 };
 
 const reducer = handleActions(
@@ -15,13 +14,6 @@ const reducer = handleActions(
       base,
       rates,
       date
-    })),
-    [types.GET_CURRENCY_RATE_SUCCESS]: mergeIn(({ payload: { base, rates, date } }) => ({
-      converterData: {
-        base,
-        rates,
-        date
-      }
     })),
   },
   initialState

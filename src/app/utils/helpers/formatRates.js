@@ -8,7 +8,7 @@ export const getBaseCurrency = ({base, rates}) => formatRates(rates).find(option
 
 export const getFormatRatesAndBase = ({base, rates}) => {
   const formattedRates = formatRates(rates);
-  const formattedBase = formattedRates.find(option => option.label === base);
+  const formattedBase = formattedRates.find(option => option.label === base) || { value: 1, label: base };
 
   return {
     rates: formattedRates,

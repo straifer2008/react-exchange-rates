@@ -16,18 +16,6 @@ export const axiosOptions = {
         });
         break;
       }
-      case types.GET_CURRENCY_RATE: {
-        const {base, rates} = getFormatRatesAndBase(response.data);
-        next({
-          type: `${action.type}_SUCCESS`,
-          payload: {
-            date: response.data.date,
-            rates,
-            base
-          },
-        });
-        break;
-      }
       default:
         next({
           type: `${action.type}_SUCCESS`,

@@ -24,6 +24,7 @@ const DefaultCurrency = ({ onChange }) => {
     <div className="DefaultCurrency">
       <small>Default currency</small>
       <Select
+        value={options.filter(option => option.label === base.label)}
         className="DefaultCurrency_select"
         defaultValue={base}
         options={options}

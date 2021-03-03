@@ -1,10 +1,10 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {ContentContainer} from "../../containers";
 import {ConverterRow} from "../../components";
 import {useDispatch, useSelector} from "react-redux";
 import {fieldNames} from "../../constants/fieldNames";
-import './styles.scss';
 import {dataOperation} from "../../store/data";
+import './styles.scss';
 
 
 const ConverterPage = () => {
@@ -14,11 +14,11 @@ const ConverterPage = () => {
   }));
   const [defaultValues, setDefaultValues] = useState({
     [fieldNames.yours]: base,
-    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': base.label))
+    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': 'USD'))
   })
   const [currencyValues, setCurrencyValues] = useState({
     [fieldNames.yours]: base.value,
-    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': base.label)).value,
+    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': 'USD')).value,
   })
 
   const onChangeValueHandler = (value, name, resetValues) => {
@@ -44,10 +44,9 @@ const ConverterPage = () => {
   }
 
   const onChangeCurrencyHandler = (option, name) => {
-    console.log(option, name, 'onChangeCurrencyHandler');
     switch (name) {
       case fieldNames.yours: {
-        dispatch(dataOperation.getConverterRate(option.label, defaultValues[fieldNames.theirs].label))
+        dispatch(dataOperation.getRates(option.label));
         break;
       }
       case fieldNames.theirs: {
@@ -61,6 +60,13 @@ const ConverterPage = () => {
       default: break;
     }
   }
+
+  useEffect(() => {
+    if (base) {
+      onChangeValueHandler(base.value, fieldNames.yours);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [base])
 
   return (
     <div className="ConverterPage">
