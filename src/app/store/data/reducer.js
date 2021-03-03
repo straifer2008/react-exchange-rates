@@ -1,16 +1,12 @@
 import { handleActions } from "redux-actions";
 import {types} from "./types";
 import {mergeIn} from "../../utils/helpers/stateHelpers";
-import {fieldNames} from "../../constants/fieldNames";
 
 const initialState = {
-  base: 'UAH',
+  base: {value: 1, label: 'UAH'},
   rates: null,
   date: null,
-  currencyInput: {
-    [fieldNames.yours]: 1,
-    [fieldNames.theirs]: 1,
-  }
+  converterData: null
 };
 
 const reducer = handleActions(
@@ -20,7 +16,13 @@ const reducer = handleActions(
       rates,
       date
     })),
-    [types.CHANGE_CURRENCY_INPUT]: mergeIn(({ payload: {name, value} }) => ({ [name]: +value }))
+    [types.GET_CURRENCY_RATE_SUCCESS]: mergeIn(({ payload: { base, rates, date } }) => ({
+      converterData: {
+        base,
+        rates,
+        date
+      }
+    })),
   },
   initialState
 );

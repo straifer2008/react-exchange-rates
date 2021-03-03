@@ -1,33 +1,31 @@
-import {useState} from 'react';
 import Select from "react-select";
 import './styles.scss';
 
-const ConverterRow = ({ options, name, onChangeCurrency, onChangeValue, defValue }) => {
-  const [inputValue, setInputValue] = useState(defValue[name].value);
+const ConverterRow = ({ options, name, onChangeCurrency, onChangeValue, defValue, calcValue }) => {
 
   const onChangeCurrencyHandler = (option) => {
     onChangeCurrency(option, name);
   }
 
   const onChangeInputHandler = ({target: { value }}) => {
-    setInputValue(value);
-    onChangeValue(value, name);
+    onChangeValue(+value, name);
   }
 
   return (
     <div className="ConverterRow">
       <input
         type="number"
+        step="any"
         className="def-input"
         placeholder="Enter value"
-        value={inputValue}
+        value={calcValue}
         onChange={onChangeInputHandler}
       />
       <Select
         className="def-select"
         options={options}
         onChange={onChangeCurrencyHandler}
-        defaultValue={defValue[name]}
+        defaultValue={defValue}
       />
     </div>
   );

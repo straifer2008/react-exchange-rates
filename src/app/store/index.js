@@ -5,7 +5,7 @@ import data from "./data";
 
 
 const rootReducer = combineReducers({
-  data: persistReducer({ key: "data", storage, blacklist: ['rates', 'date'] }, data)
+  data: persistReducer({ key: "data", storage, blacklist: ['rates', 'date'] }, data),
 });
 
 export default rootReducer;

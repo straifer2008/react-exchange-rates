@@ -13,4 +13,18 @@ const getRates = (baseCurrency = 'uah') => ({
   },
 });
 
-export { getRates };
+const getConverterRate = (fromCurrency, toCurrency) => ({
+  type: types.GET_CURRENCY_RATE,
+  payload: {
+    request: {
+      url: '/latest',
+      method: "GET",
+      params: {
+        base: fromCurrency.toUpperCase(),
+        symbols: toCurrency.toUpperCase()
+      }
+    },
+  },
+})
+
+export { getRates, getConverterRate };

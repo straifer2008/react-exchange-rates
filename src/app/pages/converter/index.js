@@ -2,32 +2,65 @@ import {useState} from 'react';
 import {ContentContainer} from "../../containers";
 import {ConverterRow} from "../../components";
 import {useDispatch, useSelector} from "react-redux";
-import {debounce} from "lodash";
-import {dataAction} from "../../store/data";
 import {fieldNames} from "../../constants/fieldNames";
 import './styles.scss';
+import {dataOperation} from "../../store/data";
 
 
 const ConverterPage = () => {
-  console.log('ConverterPage');
-
   const dispatch = useDispatch();
-  const {options, baseCurrency} = useSelector(({data: {rates, base}}) => ({
-    options: rates,
-    baseCurrency: base
+  const {options, base} = useSelector(({data: {rates, base}}) => ({
+    options: rates, base
   }));
-  const [defaultValues] = useState({
-    [fieldNames.yours]: {value: 1, label: baseCurrency},
-    [fieldNames.theirs]: options[0]
+  const [defaultValues, setDefaultValues] = useState({
+    [fieldNames.yours]: base,
+    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': base.label))
+  })
+  const [currencyValues, setCurrencyValues] = useState({
+    [fieldNames.yours]: base.value,
+    [fieldNames.theirs]: options.find(option => option.label === (base.label === 'USD' ? 'UAH': base.label)).value,
   })
 
-  const onChangeCurrencyHandler = (option, name) => {
-    console.log(option, name)
+  const onChangeValueHandler = (value, name, resetValues) => {
+    switch (name) {
+      case fieldNames.yours: {
+        setCurrencyValues({
+          [fieldNames.yours]: value,
+          [fieldNames.theirs]: Math
+            .round((defaultValues[fieldNames.theirs].value * value + Number.EPSILON) * 1000) / 1000 || 0
+        });
+        break;
+      }
+      case fieldNames.theirs: {
+        setCurrencyValues({
+          [fieldNames.yours]: resetValues || Math
+            .round((value / defaultValues[fieldNames.theirs].value + Number.EPSILON) * 1000) / 1000 || 0,
+          [fieldNames.theirs]: value,
+        });
+        break;
+      }
+      default: break;
+    }
   }
-  const onChangeValueHandler = debounce((value, name) => {
-    console.log({name, value})
-    dispatch(dataAction.changeCurrencyInput({name, value}))
-  }, 300)
+
+  const onChangeCurrencyHandler = (option, name) => {
+    console.log(option, name, 'onChangeCurrencyHandler');
+    switch (name) {
+      case fieldNames.yours: {
+        dispatch(dataOperation.getConverterRate(option.label, defaultValues[fieldNames.theirs].label))
+        break;
+      }
+      case fieldNames.theirs: {
+        setDefaultValues({
+          ...defaultValues,
+          [fieldNames.theirs]: option
+        })
+        onChangeValueHandler(option.value, fieldNames.theirs, 1);
+        break;
+      }
+      default: break;
+    }
+  }
 
   return (
     <div className="ConverterPage">
@@ -41,7 +74,8 @@ const ConverterPage = () => {
          options={options}
          onChangeCurrency={onChangeCurrencyHandler}
          onChangeValue={onChangeValueHandler}
-         defValue={defaultValues}
+         defValue={defaultValues[fieldNames.yours]}
+         calcValue={currencyValues[fieldNames.yours]}
        />
 
        <ConverterRow
@@ -49,7 +83,8 @@ const ConverterPage = () => {
          options={options}
          onChangeCurrency={onChangeCurrencyHandler}
          onChangeValue={onChangeValueHandler}
-         defValue={defaultValues}
+         defValue={defaultValues[fieldNames.theirs]}
+         calcValue={currencyValues[fieldNames.theirs]}
        />
       </ContentContainer>
     </div>

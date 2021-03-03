@@ -1,22 +1,39 @@
 import {types} from "../../store/data/types";
-import {formatRates} from "./formatRates";
+import {getFormatRatesAndBase} from "./formatRates";
 
 export const axiosOptions = {
   onSuccess: ({ action, next, response, dispatch }) => {
-    if (action.type === types.GET_RATES) {
-      next({
-        type: `${action.type}_SUCCESS`,
-        payload: {
-          rates: formatRates(response.data.rates),
-          date: response.data.date,
-          base: response.data.base
-        },
-      });
-    } else {
-      next({
-        type: `${action.type}_SUCCESS`,
-        payload: response,
-      });
+    switch (action.type) {
+      case types.GET_RATES: {
+        const {base, rates} = getFormatRatesAndBase(response.data);
+        next({
+          type: `${action.type}_SUCCESS`,
+          payload: {
+            date: response.data.date,
+            rates,
+            base
+          },
+        });
+        break;
+      }
+      case types.GET_CURRENCY_RATE: {
+        const {base, rates} = getFormatRatesAndBase(response.data);
+        next({
+          type: `${action.type}_SUCCESS`,
+          payload: {
+            date: response.data.date,
+            rates,
+            base
+          },
+        });
+        break;
+      }
+      default:
+        next({
+          type: `${action.type}_SUCCESS`,
+          payload: response,
+        });
+        break;
     }
   },
   onError: ({ action, next, error, dispatch }) => {

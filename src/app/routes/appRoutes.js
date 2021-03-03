@@ -7,7 +7,7 @@ import {dataOperation} from "../store/data";
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
-  const baseCurrency = useSelector(({ data: { base }}) => base);
+  const baseCurrency = useSelector(({ data: { base }}) => base.label);
   const rates = useSelector(({data: { rates }}) => rates);
 
   useEffect(() => {

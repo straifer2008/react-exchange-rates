@@ -19,7 +19,7 @@ const RatesPage = () => {
   return (
     <div className="RatesPage">
       <div className="RatesPage_title m-b-20">
-        <h1 className="m-r-100">Rates for <strong>{base}</strong> currency</h1>
+        <h1 className="m-r-100">Rates for <strong>{base.label}</strong> currency</h1>
         <input
           className="def-input"
           type="search"
@@ -32,7 +32,7 @@ const RatesPage = () => {
           rates
             .filter((rate) => rate.label.includes(searchStr.toUpperCase()))
             .map((rate) => {
-              if (rate.label === base) {
+              if (rate.label === base.label) {
                 return null
               }
 

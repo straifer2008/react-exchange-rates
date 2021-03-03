@@ -25,7 +25,7 @@ const DefaultCurrency = ({ onChange }) => {
       <small>Default currency</small>
       <Select
         className="DefaultCurrency_select"
-        defaultValue={{label: base, value: 1}}
+        defaultValue={base}
         options={options}
         onChange={onChangeHandler}
       />

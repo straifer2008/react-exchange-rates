@@ -1,10 +1,19 @@
 .ConverterRow {
   display: flex;
   align-items: center;
+  @media screen and (max-width: 650px){
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
   &>* {
     margin-bottom: 1rem;
     &:first-child {
       margin-right: 1rem;
+      @media screen and (max-width: 650px){
+        margin-right: 0;
+      }
     }
   }
 }

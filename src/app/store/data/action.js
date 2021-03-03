@@ -1,8 +1,3 @@
-import { createActions } from "redux-actions";
-import {types} from "./types";
+// import { createActions } from "redux-actions";
 
-export const {
-  changeCurrencyInput
-} = createActions(
-  types.CHANGE_CURRENCY_INPUT
-);
+// export const {} = createActions();
